@@ -19,12 +19,12 @@ I am using this simulator to breadboard my replacement board and write the softw
 
 I am sharing the project as a thank you to the community. I hope that it will help and inspire others to bring back to life old test and measurement gear. And do it in a safer way! 
 
-The Fritzing folder includes a Fritzing project with schematic and breadboard view (with PNG pictures if you do not have Fritzing) and is design for a 197A, with a 16 pin DIL socket. Pin 1 and 16 are used by the backlight.
+The Fritzing folder includes a Fritzing project with schematic and breadboard view (with PNG pictures if you do not have Fritzing), designed for a 197A, with a 16 pin DIL socket. Pin 1 and 16 are used by the backlight.
 
-If you use it with a 197 has a 14 pin socket, connect it so that pin 1 and 16 of the simulator DIL socket are left unconnected. Pin 1 of the display connects to pin 21 of the simulator, etc. 
+If you use it with a 197 has a 14 pin socket, as it does not have the backlight. everything else is the same. Connect it so that pin 1 and 16 of the simulator DIL socket are left unconnected, maintaining the same orientation (Pin 1 of the display connects to pin 2 of the simulator, etc.). 
 
 INSTALLATION: 
-- Connect the Arduino as shown in the Fritzing project. Connenct the display board to the 16 pin DIL as it is connected to the real board. 
+- Connect the Arduino as shown in the Fritzing project (197A, see above for 197). Connect the display board to the DIL socket of the simulator as you would to the real board. 
 - Download the entire content of this repository from gitHub. You should have displayBoardTester.ino in a folder called displayBoardTester, together with all the .h and .c files. 
 - Open displayBoardTester.ino with the Arduino IDE (I used 1.8.19 so I can only attest that it will work there). 
 - Select Arduino Nano (included in Arduino AVR board)
@@ -40,6 +40,19 @@ Principles of operation:
 - The simulator is controlled via Serial Monitor. You can turn on and off any segment in this way.
 
 Serial commands
+---------------
+? print a summary of all the recognized commands
+The following commands toggle the corresponding segment on the display on and off: 
+MIN BAT RCL AC dB STO REL AUTO mA k V u M mV RMT A OHM C
+Entering n[-m]<seg> controls the numeric display. Where:
+  <seg> identifies the segment (abcdefgp)
+  n,m are numbers from one to 6 that identify the digit
+    
+For example, if the display is completely off, the following sequence:
+    k OHM 3abcdefg
+    
+Will show "8 k Ohm" on the display
+  
 
 
 ALX2009
