@@ -35,7 +35,6 @@
 #include <string.h> 
 #include <TimerOne.h>
 
-// the sensor communicates using SPI, so include the library:
 #include <SPI.h>
 
 // pins used for the connection with the board
@@ -90,8 +89,7 @@ void printHelp(void) {
   Serial.println(F(" mA | k | V | u | M | mV  ==> toggle unit bit"));
   Serial.println(F(" RMT | A | OHM | C        ==> toggle unit2 bit"));
   Serial.println(F(" n[-m]<seg> to turn on segments on display n[to m]"));
-  Serial.println(F(" where n,m: 1-6, <seg> any combination of abcdefgp"));
-  Serial.println(F(" bla  ==> add event"));
+  Serial.println(F(" where n,m: 1-6, <seg> any combination of   "));
 
   printPrompt();
 }
