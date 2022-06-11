@@ -21,7 +21,7 @@ I am sharing the project as a thank you to the community. I hope that it will he
 
 The Fritzing folder includes a Fritzing project with schematic and breadboard view (with PNG pictures if you do not have Fritzing), designed for a 197A, with a 16 pin DIL socket. Pin 1 and 16 are used by the backlight.
 
-If you use it with a 197 has a 14 pin socket, as it does not have the backlight. everything else is the same. Connect it so that pin 1 and 16 of the simulator DIL socket are left unconnected, maintaining the same orientation (Pin 1 of the display connects to pin 2 of the simulator, etc.). 
+The 197 has a 14 pin socket, as it does not have the backlight. Everything else is the same. Connect it so that pin 1 and 16 of the simulator DIL socket are left unconnected, maintaining the same orientation (Pin 1 of the display connects to pin 2 of the simulator, etc.). 
 
 INSTALLATION: 
 - Connect the Arduino as shown in the Fritzing project (197A, see above for 197). Connect the display board to the DIL socket of the simulator as you would to the real board. 
