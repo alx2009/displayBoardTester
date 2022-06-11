@@ -19,6 +19,22 @@ I am using this simulator to breadboard my replacement board and write the softw
 
 I am sharing the project under a MIT license as a thanks to the community. I hope that it will help and inspire others to bring back to life old test and measurement gear. And do it in a safer way! 
 
+The Fritzing folder includes a Fritzing project with schematic and breadboard view (with PNG pictures if you do not have Fritzing). 
+
+INSTALLATION of the sketch: 
+- Download the entire content of this repository from gitHub. you should have displayBoardTester.ino in a folder called displayBoardTester, together with all the .h and .c files. 
+- Open displayBoardTester.ino with the Arduino IDE (I used 1.8.19 so I can only attest that it will work there). 
+- Select Arduino Nano (included in Arduino AVR board)
+- Install library TimerOne if not already installed (see here for more information https://playground.arduino.cc/Code/Timer1/)
+- done! You can now compile and download the SW onto the Arduino. You control the SW via Serial monitor (see below)  
+
+Principles of operation:
+- A voltage diveder made with three 10K resistors generates the 3.3V and 1.66V needed by the display board. This is the same method used in the Keithley main board
+- The timerOne library is used to generate a 83.333 kHz (not exactly the same as the original board, but close enough and within specs of the drivr chip)
+- The standard SPI library is used to generate the customary SPI signals. the SPI clock has been selected to be as close as possible to the original, some delayMicroseconds added as needed to replicate the original timing.
+- RESET and C/D signals are generated via digitalWrite(). A 4.7K pull down resistor is used on the RESET pin as this is what is used in the original board.
+- Arduino pins D2-D5 read the button presses (22K pull-down resistors are used as in the original board) 
+
 ALX2009
 
 
