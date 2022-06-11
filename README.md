@@ -42,6 +42,7 @@ Principles of operation:
 Serial commands
 ---------------
 ? print a summary of all the recognized commands
+
 The following commands toggle the corresponding segment on the display on and off: 
 MIN BAT RCL AC dB STO REL AUTO mA k V u M mV RMT A OHM C
 Entering n[-m]<seg> controls the numeric display. Where:
