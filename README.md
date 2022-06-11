@@ -33,7 +33,7 @@ INSTALLATION:
 
 Principles of operation:
 - A voltage diveder made with three 10K resistors generates the 3.3V and 1.66V needed by the display board. This is the same method used in the Keithley main board
-- The timerOne library is used to generate a 83.333 kHz (not exactly the same as the original board, but close enough and within specs of the drivr chip)
+- The timerOne library is used to generate a 83.333 kHz (not exactly the same as the original board, but close enough and within specs of the driver chip)
 - The standard SPI library is used to generate the customary SPI signals. the SPI clock has been selected to be as close as possible to the original, some delayMicroseconds added as needed to replicate the original timing.
 - RESET and C/D signals are generated via digitalWrite(). A 4.7K pull down resistor is used on the RESET pin as this is what is used in the original board.
 - Arduino pins D2-D5 read the button presses (22K pull-down resistors are used as in the original board)
