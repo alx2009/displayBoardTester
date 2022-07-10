@@ -37,8 +37,8 @@
 
 #include <SPI.h>
 
-// pins used for the connection with the board
-// the other you need are controlled by the SPI library):
+// pins used for the connection with the board (the
+// other you need are controlled by the SPI library):
 #include "aButton.h"
 #include "K197_set.h"
 
@@ -54,6 +54,8 @@ const int clockPin = 9;
 // SPI SCK,  D13
 
 aButtonGroup buttons;
+
+#define SHOWTEXT_SIZE 8 //size of the buffer for the show text command
 
 byte startupSeq[] = {};
 byte initSeq[]    = { 0x10, 0x20, 0x30, 0x4A, 0x14, 0x00, 0x18, 0x11, 0x20 };
@@ -88,6 +90,8 @@ void printHelp(void) {
   Serial.println(F(" MIN[US] | BAT | RCL | AC | dB | STO | REL | AUTO ==> toggle mode bit"));
   Serial.println(F(" mA | k | V | u | M | mV  ==> toggle unit bit"));
   Serial.println(F(" RMT | A | OHM | C        ==> toggle unit2 bit"));
+  Serial.println(F(" show text> ==> show text"));
+  Serial.println(F(" clear ==> clear the display"));
   Serial.println(F(" n[-m]<seg> to turn on segments on display n[to m]"));
   Serial.println(F(" where n,m: 1-6, <seg> any combination of   "));
 
@@ -145,6 +149,29 @@ void handleSegments(char*token, uint8_t seg1, uint8_t seg2) {
     for(int i=seg1; i<=seg2; i++) {
         dataSeq[digit2index(i)] = segdata;   
     }
+}
+
+#define DP_bm char(0x04);
+
+char char2segment(int c, bool dp) {
+  static char c2s[90] = {
+      char(0x00), char(0x00), char(0x00), char(0x00), char(0x00), char(0x00), char(0xF3), char(0x40), 
+      char(0x00), char(0x00), char(0xA8), char(0x00), char(0x00), char(0x10), char(0x00), char(0x52), // row 2 (0x20-0x2f) ==> row 0
+      char(0xEB), char(0xC0), char(0x7A), char(0xF8), char(0xD1), char(0xB9), char(0xBB), char(0xC9), 
+      char(0xFB), char(0xF9), char(0x00), char(0x00), char(0x00), char(0x30), char(0x00), char(0x48), // row 3 (0x30-0x3f) ==> row 1
+      char(0x73), char(0xDB), char(0xB3), char(0x2B), char(0xE8), char(0x3B), char(0x1B), char(0xAB), 
+      char(0xD3), char(0x03), char(0xE0), char(0x9B), char(0x23), char(0x69), char(0xCB), char(0xB2), // row 4 (0x40-0x4f) ==> row 2
+      char(0x5B), char(0x79), char(0x7B), char(0x0B), char(0xE3), char(0xA2), char(0xE1), char(0xAA), 
+      char(0x38), char(0x71), char(0x00), char(0x00), char(0x91), char(0x00), char(0x08), char(0x20), // row 5 (0x50-0x5f) ==> row 3
+      char(0x00), char(0xFA), char(0xB3), char(0x32), char(0xF2), char(0x22), char(0x13), char(0x3A), 
+      char(0x93), char(0x80), char(0xA0), char(0x9B), char(0x23), char(0x69), char(0x92), char(0xB2), // row 6 (0x60-0x6f) ==> row 4
+      char(0x5B), char(0xD9), char(0x12), char(0x0B), char(0x33), char(0xA2), char(0xE1), char(0xAA), 
+      char(0x38), char(0xF1)                                                                          // row 7 (0x70-0x7f) ==> row 5
+  };
+  if (c<32 || c >=(90+32)) c=32;
+  char s = c2s[c-32];
+  if (dp) s |= DP_bm;
+  return s;
 }
 
 void printError(char*buf) {
@@ -226,7 +253,37 @@ void handleSerial(void) {
        toggle_unit2_bit(dataSeq, xbit);
        return;
     }
-
+    if (strcasecmp("clear", buf) == 0 ) {
+       for (int i=1; i<7; i++) dataSeq[i] = 0x00;
+       return;
+    }
+    if (strcasecmp("show", buf) == 0 ) {
+       char showtext[SHOWTEXT_SIZE+1];
+       size_t text_len=Serial.readBytesUntil('>', showtext, SHOWTEXT_SIZE);
+       if (text_len<=0) {
+          return; 
+       }
+       buf[text_len]=0;
+       unsigned int i_src=0;
+       bool dp = false;
+       for (int i=1; i<7; i++) {
+           dataSeq[i]=char(0x00);
+       }
+       for (int i_dst=1; i_dst<7; i_dst++) {
+           if (showtext[i_src] == '.') {
+              i_src++; 
+              dp=true;
+           } else {
+              dp=false;
+           }
+           if (i_src>=text_len) {
+              return;
+           }
+           dataSeq[i_dst] = char2segment(showtext[i_src], dp);
+           i_src++;
+       }
+       return;
+    }
     //check if 7 segment (+dp) specification
     char*token=buf;
     uint8_t seg1; uint8_t seg2;

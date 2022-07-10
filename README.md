@@ -45,17 +45,27 @@ Serial commands
 
 The following commands toggle the corresponding segment on the display on and off: 
 MIN BAT RCL AC dB STO REL AUTO mA k V u M mV RMT A OHM C
-Entering n[-m]<seg> controls the numeric display. Where:
-  <seg> identifies the segment (abcdefgp)
+show text> ==> show the string "text" (> is the optioptional separator)  
+clear ==> clears the display
+Entering n[-m]<seg> controls the numeric display at the segment level. Where:
+  <seg> identifies the segment(s) (abcdefgp)
   n,m are numbers from one to 6 that identify the digit
     
-For example, if the display is completely off, the following sequence:
+The show command supports the following characters: &'*-/0123456789=?@ACDEFGHIJKLMNPQRTUVWXY\^_abcdefghijnoqrtuy
+unsupported characters turn off al segments.
+
+example 1:
+the following sequence:
+show 123.456>
+
+will show 123.456 on the display
+
+example 2:
+if the display is completely off, the following sequence:
     k OHM 3abcdefg
     
 Will show "8 k Ohm" on the display
   
-
-
 ALX2009
 
 
